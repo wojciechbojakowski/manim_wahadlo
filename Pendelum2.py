@@ -30,6 +30,29 @@ def x2_fun(sol):
 
 def y2_fun(sol):
     return -L*(np.cos(sol.y[0])+np.cos(sol.y[1]))
+
+def energy(sol):
+    θ1 = sol.y[0]
+    ω1 = sol.y[1]
+    θ2 = sol.y[2]
+    ω2 = sol.y[3]
+
+    m1 = m
+    m2 = m
+    l1 = L
+    l2 = L
+
+    # Energia potencjalna
+    V = -(m1 + m2) * g * l1 * np.cos(θ1) - m2 * g * l2 * np.cos(θ2)
+
+    # Energia kinetyczna
+    v1_sq = (l1 * ω1)**2
+    v2_sq = v1_sq + (l2 * ω2)**2 + 2 * l1 * l2 * ω1 * ω2 * np.cos(θ1 - θ2)
+    T = 0.5 * m1 * v1_sq + 0.5 * m2 * v2_sq
+
+    # Energia całkowita
+    E = T + V
+    return E
 # theta0 = np.pi/2
 # omega0 = 0.0
 
@@ -83,7 +106,7 @@ def text(y0):
 def text2(y0):
     return r"($\theta_2)_{t=0}$: "+f"{y0[1]:.6f}"
 
-fig, axes = plt.subplots(2, 1, figsize=(10, 4))
+fig, axes = plt.subplots(3, 1, figsize=(10, 4))
 
 def energia(sol):
     theta1, theta2, p1, p2 = sol.y
@@ -99,14 +122,14 @@ E3 = energia(sol3)
 E4 = energia(sol4)
 E5 = energia(sol5)
 
-# axes[2].plot(sol.t, E1, label='Energia całkowita y0', color='b')
-# axes[2].plot(sol2.t, E2, label='Energia całkowita y0_2', color='r')
-# axes[2].plot(sol3.t, E3, label='Energia całkowita y0_3', color='pink')
-# axes[2].plot(sol4.t, E4, label='Energia całkowita y0_4', color='purple')
-# axes[2].plot(sol5.t, E5, label='Energia całkowita y0_5', color='green')
-# axes[2].legend()
-# axes[2].set_xlabel('Czas [s]')
-# axes[2].set_ylabel('Energia [J]')
+axes[2].plot(sol.t, E1, label='Energia całkowita y0', color='b')
+axes[2].plot(sol2.t, E2, label='Energia całkowita y0_2', color='r')
+axes[2].plot(sol3.t, E3, label='Energia całkowita y0_3', color='pink')
+axes[2].plot(sol4.t, E4, label='Energia całkowita y0_4', color='purple')
+axes[2].plot(sol5.t, E5, label='Energia całkowita y0_5', color='green')
+axes[2].legend()
+axes[2].set_xlabel('Czas [s]')
+axes[2].set_ylabel('Energia [J]')
 
 axes[0].plot(sol.t, sol.y[0], label=text(y0),color="b")
 axes[0].set_title(r"Kąt $\theta_1$")
